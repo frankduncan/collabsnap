@@ -20,6 +20,15 @@ public class SimpleServlet {
     }
   }
 
+  public static class Poll extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      queue.poll();
+      System.out.println("Poll Successful, size of queue is: " + queue.size());
+      response.setContentType("text/html");
+      response.setStatus(HttpServletResponse.SC_OK);
+    }
+  }
+
   public static class Message {
   }
 }

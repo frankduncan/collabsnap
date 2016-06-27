@@ -12,4 +12,13 @@
     <servlet-name>Ping</servlet-name>
     <url-pattern>/server/ping</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>Poll</servlet-name>
+    <servlet-class>edu.vanderbilt.SimpleServlet$Poll</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Poll</servlet-name>
+    <url-pattern>/server/poll</url-pattern>
+  </servlet-mapping>
 </web-app>
