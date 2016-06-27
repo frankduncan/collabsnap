@@ -1,1 +1,1 @@
-<blocks app="Snap! 4.0, http://snap.berkeley.edu" version="1"><block-definition s="collabsnap-ping-server" type="command" category="control"><header></header><code></code><inputs></inputs></block-definition></blocks>
+<blocks app="Snap! 4.0, http://snap.berkeley.edu" version="1"><block-definition s="collabsnap-ping-server" type="command" category="control"><header></header><code></code><inputs></inputs><script><block s="doReport"><block s="reportURL"><l>localhost:8080/server/ping</l></block></block></script></block-definition></blocks>
