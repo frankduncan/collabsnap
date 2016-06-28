@@ -22,10 +22,14 @@ public class SimpleServlet {
 
   public static class Poll extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      queue.poll();
       System.out.println("Poll Successful, size of queue is: " + queue.size());
       response.setContentType("text/html");
       response.setStatus(HttpServletResponse.SC_OK);
+      if(queue.poll() != null) {
+        response.getWriter().print("true");
+      } else {
+        response.getWriter().print("false");
+      }
     }
   }
 
