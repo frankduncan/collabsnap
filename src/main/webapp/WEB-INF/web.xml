@@ -21,4 +21,13 @@
     <servlet-name>Poll</servlet-name>
     <url-pattern>/server/poll</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>PostSprite</servlet-name>
+    <servlet-class>edu.vanderbilt.SimpleServlet$PostSprite</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PostSprite</servlet-name>
+    <url-pattern>/server/postsprite</url-pattern>
+  </servlet-mapping>
 </web-app>

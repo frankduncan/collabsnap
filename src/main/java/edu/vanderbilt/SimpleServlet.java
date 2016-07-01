@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.*;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
  
 public class SimpleServlet {
@@ -30,6 +32,21 @@ public class SimpleServlet {
       } else {
         response.getWriter().print("false");
       }
+    }
+  }
+
+  public static class PostSprite extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      StringBuffer str = new StringBuffer();
+      String line = null;
+      try {
+        BufferedReader reader = request.getReader();
+        while ((line = reader.readLine()) != null)
+          str.append(line);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      System.out.println(str.toString());
     }
   }
 
