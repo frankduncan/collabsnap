@@ -15,7 +15,7 @@ public class SimpleServlet {
 
   public static class Ping extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      queue.offer(new Message());
+      queue.offer(new PingMessage());
       System.out.println("Ping Successful, size of queue is: " + queue.size());
       response.setContentType("text/html");
       response.setStatus(HttpServletResponse.SC_OK);
@@ -27,8 +27,9 @@ public class SimpleServlet {
       System.out.println("Poll Successful, size of queue is: " + queue.size());
       response.setContentType("text/html");
       response.setStatus(HttpServletResponse.SC_OK);
-      if(queue.poll() != null) {
-        response.getWriter().print("true");
+      Message msg = queue.poll();
+      if(msg != null) {
+        response.getWriter().print(msg.getText());
       } else {
         response.getWriter().print("false");
       }
@@ -46,10 +47,24 @@ public class SimpleServlet {
       } catch (Exception e) {
         e.printStackTrace();
       }
-      System.out.println(str.toString());
+      queue.offer(new SpriteMessage(str.toString()));
+      System.out.println("Sprite Post Successful, size of queue is: " + queue.size());
+      response.setContentType("text/html");
+      response.setStatus(HttpServletResponse.SC_OK);
     }
   }
 
-  public static class Message {
+  public interface Message {
+    public abstract String getText();
+  }
+
+  public static class PingMessage implements Message {
+    public String getText() { return "ping"; }
+  }
+
+  public static class SpriteMessage implements Message {
+    String spriteXML;
+    SpriteMessage(String spriteXML) { this.spriteXML = spriteXML; }
+    public String getText() { return spriteXML; }
   }
 }

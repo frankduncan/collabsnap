@@ -29,3 +29,7 @@ Use this block to poll server each second for news of a new message.
 ### collabsnap-serialize-sprite
 
 Use this block to get the xml serialization of the passed in sprite, useful with "my[self]" sense block.
+
+### collabsnap-send-to-server
+
+Use this block to send an object to the server.  Most useful with collabsnap-serialize-sprite.
