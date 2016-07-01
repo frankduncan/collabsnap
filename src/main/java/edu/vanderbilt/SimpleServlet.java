@@ -25,12 +25,14 @@ public class SimpleServlet {
   public static class Poll extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       System.out.println("Poll Successful, size of queue is: " + queue.size());
-      response.setContentType("text/html");
-      response.setStatus(HttpServletResponse.SC_OK);
       Message msg = queue.poll();
       if(msg != null) {
+        response.setContentType(msg.getContentType());
+        response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().print(msg.getText());
       } else {
+        response.setContentType("text/html");
+        response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().print("false");
       }
     }
@@ -56,15 +58,18 @@ public class SimpleServlet {
 
   public interface Message {
     public abstract String getText();
+    public String getContentType();
   }
 
   public static class PingMessage implements Message {
     public String getText() { return "ping"; }
+    public String getContentType() { return "text/html"; }
   }
 
   public static class SpriteMessage implements Message {
     String spriteXML;
     SpriteMessage(String spriteXML) { this.spriteXML = spriteXML; }
     public String getText() { return spriteXML; }
+    public String getContentType() { return "application/xml"; }
   }
 }
