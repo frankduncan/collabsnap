@@ -21,3 +21,11 @@ From inside snap, go to File->Import and load up <projecthome>/src/main/snap/col
 ### collabsnap-ping-server
 
 Use this block to send a simple ping to the server, which should create some kind of output in the jetty log for now.
+
+### collabsnap-poll
+
+Use this block to poll server each second for news of a new message.
+
+### collabsnap-serialize-sprite
+
+Use this block to get the xml serialization of the passed in sprite, useful with "my[self]" sense block.
