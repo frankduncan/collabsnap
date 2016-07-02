@@ -2,21 +2,35 @@ An experimental project to create a general purpose library allowing multiple SN
 
 # Booting the http server
 
+## Using the latest commit
+
 To boot the server using maven, run:
 
 ```bash
 mvn jetty:run
 ```
 
-# Loading up SNAP from jetty
+## Using the released war
 
-In a local webbrowser, load up ```localhost:8080/snap/snap.html```
+You can boot up the [war found on the releases page](https://github.com/frankduncan/collabsnap/releases/download/0.1/collabsnap-server-0.1.war)
 
-# Loading the collabsnap SNAP block library
+# Loading up collabSNAP from jetty
 
-From inside snap, go to File->Import and load up <projecthome>/src/main/snap/collabsnap.cml
+In a local webbrowser, load up ```localhost:8080/snap/snap.html```.  Then from inside snap, load up the xml via File->Import
 
-## Using collabsnap blocks
+## Using the latest commit
+
+Then load <projecthome>/src/main/snap/collabsnap.xml from your project
+
+## Using the release xml
+
+Optionally, load up the [xml from the releases page](https://github.com/frankduncan/collabsnap/releases/download/0.1/collabsnap.xml)
+
+# Sample projects
+
+In the resources folder, you'll find sample projects that show how one might use collabsnap.
+
+# Using collabsnap blocks
 
 ### collabsnap-ping-server
 
