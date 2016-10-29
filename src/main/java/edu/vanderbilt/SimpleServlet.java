@@ -7,6 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.*;
+import java.util.*;
+
+import org.apache.commons.fileupload.*;
+import org.apache.commons.fileupload.servlet.*;
+import org.apache.commons.fileupload.disk.*;
+import org.apache.commons.io.*;
 
 import javax.xml.parsers.*;
 import javax.xml.xpath.*;
@@ -174,5 +180,57 @@ public class SimpleServlet {
     public String getText() { return spriteXML; }
     public String getContentType() { return "application/xml"; }
     public boolean ruleApplies(Rule rule) { return rule.valid(spriteDocument); }
+  }
+
+  // This should be rewritten to use servlet api 3.0+ when moved to a real container
+  public static class AddRole extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String activityName = null;
+      String roleName = null;
+      String snapFile = null;
+      try {
+        List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+        for (FileItem item : items) {
+          if (item.isFormField()) {
+            if(item.getFieldName().equals("rolename")) { roleName = item.getString(); }
+            if(item.getFieldName().equals("activityname")) { activityName = item.getString(); }
+          } else {
+            // Assumptions abound
+            snapFile = IOUtils.toString(item.getInputStream(), "UTF-8");
+          }
+        }
+      } catch (FileUploadException e) {
+        e.printStackTrace();
+      }
+
+      SimpleDatabase.getActivity(activityName).addRole(roleName, snapFile);
+
+      response.sendRedirect("adminactivity.jsp?activityname=" + activityName);
+    }
+  }
+
+  public static class DownloadRole extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String[] spliturl = request.getRequestURI().split("/",4);
+      String activityName = spliturl[2];
+      String roleNameXml = spliturl[3];
+      String roleName = roleNameXml.substring(0, roleNameXml.length() - 4);
+
+      response.setHeader("Content-Disposition", "attachment; filename=\"" + roleNameXml + "\"");
+      response.getOutputStream().write(SimpleDatabase.getActivity(activityName).getRole(roleName).snapFile.getBytes());
+      response.getOutputStream().flush();
+      response.getOutputStream().close();
+    }
+  }
+
+  public static class DeleteRole extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String activityName = request.getParameter("activityname");
+      String roleName = request.getParameter("rolename");
+
+      SimpleDatabase.getActivity(activityName).removeRole(roleName);
+
+      response.sendRedirect("adminactivity.jsp?activityname=" + activityName);
+    }
   }
 }

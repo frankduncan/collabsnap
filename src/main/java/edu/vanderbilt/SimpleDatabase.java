@@ -16,15 +16,18 @@ public class SimpleDatabase {
 
   // This is so a race condition
   public static void addActivity(String name) {
-    boolean found = false;
-    for(Activity activity : getActivities()) {
-      if(activity.name.equals(name)) { found = true; }
-    }
-    if(!found) {
+    if(getActivity(name) == null) {
       Activity activity = new Activity();
       activity.name = name;
       getActivities().add(activity);
     }
+  }
+
+  public static Activity getActivity(String name) {
+    for(Activity activity : getActivities()) {
+      if(activity.name.equals(name)) { return activity; }
+    }
+    return null;
   }
 
   private SimpleDatabase() {

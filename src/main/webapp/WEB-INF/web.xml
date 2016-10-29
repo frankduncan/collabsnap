@@ -30,4 +30,31 @@
     <servlet-name>PostSprite</servlet-name>
     <url-pattern>/server/postsprite</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <servlet-name>AddRole</servlet-name>
+    <servlet-class>edu.vanderbilt.SimpleServlet$AddRole</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddRole</servlet-name>
+    <url-pattern>/addrole</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DownloadRole</servlet-name>
+    <servlet-class>edu.vanderbilt.SimpleServlet$DownloadRole</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DownloadRole</servlet-name>
+    <url-pattern>/downloadrole/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>DeleteRole</servlet-name>
+    <servlet-class>edu.vanderbilt.SimpleServlet$DeleteRole</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteRole</servlet-name>
+    <url-pattern>/deleterole</url-pattern>
+  </servlet-mapping>
 </web-app>
