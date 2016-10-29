@@ -10,8 +10,25 @@ public class SimpleDatabase {
 
   private List<Activity> activities;
 
+  public static List<Activity> getActivities() {
+    return instance().activities;
+  }
+
+  // This is so a race condition
+  public static void addActivity(String name) {
+    boolean found = false;
+    for(Activity activity : getActivities()) {
+      if(activity.name.equals(name)) { found = true; }
+    }
+    if(!found) {
+      Activity activity = new Activity();
+      activity.name = name;
+      getActivities().add(activity);
+    }
+  }
+
   private SimpleDatabase() {
-    if(new java.io.File(FILE_NAME).exists()) {
+    if(!new java.io.File(FILE_NAME).exists()) {
       activities = new ArrayList<Activity>();
     } else {
       try {
@@ -33,7 +50,7 @@ public class SimpleDatabase {
     new Thread(new Save()).start();
   }
 
-  public static SimpleDatabase instance() {
+  private static SimpleDatabase instance() {
     if(instance == null) {
       synchronized(SimpleDatabase.class) {
         if(instance == null) {
