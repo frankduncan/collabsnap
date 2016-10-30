@@ -209,6 +209,19 @@ public class SimpleServlet {
     }
   }
 
+  public static class LoadActivity extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String[] spliturl = request.getRequestURI().split("/",4);
+      String activityName = spliturl[2];
+      String groupName = spliturl[3];
+      String roleName = request.getParameter("role");
+
+      SimpleDatabase.addGroup(groupName, SimpleDatabase.getActivity(activityName));
+
+      request.getRequestDispatcher("/snap.jsp").forward(request, response);
+    }
+  }
+
   public static class DownloadRole extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       String[] spliturl = request.getRequestURI().split("/",4);
@@ -231,6 +244,16 @@ public class SimpleServlet {
       SimpleDatabase.getActivity(activityName).removeRole(roleName);
 
       response.sendRedirect("adminactivity.jsp?activityname=" + activityName);
+    }
+  }
+
+  public static class JoinGroup extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      String groupName = request.getParameter("groupname");
+      String activityName = request.getParameter("activityname");
+      String roleName = request.getParameter("rolename");
+
+      response.sendRedirect("/activities/" + activityName + "/" + groupName + "?role=" + roleName);
     }
   }
 }

@@ -32,6 +32,24 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>JoinGroup</servlet-name>
+    <servlet-class>edu.vanderbilt.SimpleServlet$JoinGroup</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JoinGroup</servlet-name>
+    <url-pattern>/joingroup</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>LoadActivity</servlet-name>
+    <servlet-class>edu.vanderbilt.SimpleServlet$LoadActivity</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoadActivity</servlet-name>
+    <url-pattern>/activities/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>AddRole</servlet-name>
     <servlet-class>edu.vanderbilt.SimpleServlet$AddRole</servlet-class>
   </servlet>
