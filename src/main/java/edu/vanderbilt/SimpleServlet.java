@@ -218,6 +218,10 @@ public class SimpleServlet {
 
       SimpleDatabase.addGroup(groupName, SimpleDatabase.getActivity(activityName));
 
+      request.setAttribute("activityName", activityName);
+      request.setAttribute("groupName", groupName);
+      request.setAttribute("roleName", roleName);
+
       request.getRequestDispatcher("/snap.jsp").forward(request, response);
     }
   }

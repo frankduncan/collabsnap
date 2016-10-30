@@ -35,7 +35,7 @@
       <input type="hidden" name="activityname" value="<%=name%>">
       <input name="rolename">
       <input type="file" name="snapfile">
-      <input type="submit">
+      <input type="submit" value="Add">
     </form>
 
   </body>
