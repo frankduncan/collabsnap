@@ -55,8 +55,8 @@ public class SimpleServlet {
   public static class Ping extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       Group group = determineGroup(request);
-      group.queue.offer(new PingMessage());
-      System.out.println("Ping Successful, size of " + group.name + " / " + group.activity.name + " queue is: " + group.queue.size());
+      group.offer(new PingMessage());
+      System.out.println("Ping Successful, size of " + group.name + " / " + group.activity.name + " queue is: " + group.size());
       response.setContentType("text/html");
       response.setStatus(HttpServletResponse.SC_OK);
     }
@@ -65,7 +65,7 @@ public class SimpleServlet {
   public static class Poll extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       Group group = determineGroup(request);
-      System.out.println("Poll Successful, size of " + group.name + " / " + group.activity.name + " queue is: " + group.queue.size());
+      System.out.println("Poll Successful, size of " + group.name + " / " + group.activity.name + " queue is: " + group.size());
       StringBuffer str = new StringBuffer();
       String line = null;
       try {
@@ -82,7 +82,7 @@ public class SimpleServlet {
           Rule rule = getRule(doc.getDocumentElement().getFirstChild());
           msg = group.getMessageFollowingRule(rule);
         } else {
-          msg = group.queue.poll();
+          msg = group.poll();
         }
       } catch(Exception e) {
         e.printStackTrace();
@@ -125,9 +125,9 @@ public class SimpleServlet {
         e.printStackTrace();
       }
       Group group = determineGroup(request);
-      group.queue.offer(new SpriteMessage(db, str.toString()));
+      group.offer(new SpriteMessage(db, str.toString()));
       System.out.println(str.toString());
-      System.out.println("Sprite Post Successful, size of " + group.name + " / " + group.activity.name + " queue is: " + group.queue.size());
+      System.out.println("Sprite Post Successful, size of " + group.name + " / " + group.activity.name + " queue is: " + group.size());
       response.setContentType("text/html");
       response.setStatus(HttpServletResponse.SC_OK);
     }

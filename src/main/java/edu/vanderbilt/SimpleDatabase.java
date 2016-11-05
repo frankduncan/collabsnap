@@ -87,6 +87,7 @@ public class SimpleDatabase {
       try {
         Thread.sleep(5 * 60 * 1000);
         java.io.ObjectOutputStream oos = new java.io.ObjectOutputStream(new java.io.FileOutputStream(FILE_NAME));
+        instance().state.cullGroups();
         oos.writeObject(instance().state);
         oos.close();
       } catch(Exception e) {
@@ -103,6 +104,18 @@ public class SimpleDatabase {
     private State() {
       activities = new ArrayList<Activity>();
       groups = new ArrayList<Group>();
+    }
+
+    public void cullGroups() {
+      List<Group> survivingGroups = new ArrayList<Group>();
+
+      for(Group group : groups) {
+        if(group.stillActive()) {
+          survivingGroups.add(group);
+        }
+      }
+
+      groups = survivingGroups;
     }
   }
 }
