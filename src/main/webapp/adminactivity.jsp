@@ -20,15 +20,14 @@
     <h2>Roles</h2>
 
     <% java.util.List<edu.vanderbilt.data.Activity.Role> roles = activity.getRoles(); %>
-    <table>
+    <ul>
       <% for (edu.vanderbilt.data.Activity.Role role : roles) { %>
-        <tr>
-          <td><%=role.name%></td>
-          <td><a href="downloadrole/<%=name%>/<%=role.name%>.xml">Snap File</a></td>
-          <td><a href="deleterole?activityname=<%=name%>&rolename=<%=role.name%>">Delete</a></td>
-        </tr>
+        <li>
+        <%=role.name%>
+        (<% if(role.snapFile != null) { %><a href="downloadrole/<%=name%>/<%=role.name%>.xml">Download Snap File</a><% } else {%>No File<% } %>):
+        <a href="deleterole?activityname=<%=name%>&rolename=<%=role.name%>">Delete</a>
       <% } %>
-    </table>
+    </ul>
 
     <h3>Add Role</h3>
     <form action="addrole" method="post" enctype="multipart/form-data">

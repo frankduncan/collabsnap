@@ -41,7 +41,9 @@
         var ide_morph = new IDE_Morph();
         ide_morph.openIn(world);
         loop();
-        ide_morph.rawOpenProjectString(ide_morph.getURL("/downloadrole/<%= request.getAttribute("activityName") %>/<%= request.getAttribute("roleName") %>.xml"));
+        <% if(request.getAttribute("snapFileExists") != null) {%>
+          ide_morph.rawOpenProjectString(ide_morph.getURL("/downloadrole/<%= request.getAttribute("activityName") %>/<%= request.getAttribute("roleName") %>.xml"));
+        <%}%>
 
 			};
 			function loop() {

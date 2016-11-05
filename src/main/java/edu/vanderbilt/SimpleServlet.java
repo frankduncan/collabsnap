@@ -148,14 +148,19 @@ public class SimpleServlet {
             if(item.getFieldName().equals("activityname")) { activityName = item.getString(); }
           } else {
             // Assumptions abound
-            snapFile = IOUtils.toString(item.getInputStream(), "UTF-8");
+            if(item.getSize() > 0) {
+              snapFile = IOUtils.toString(item.getInputStream(), "UTF-8");
+            }
           }
         }
       } catch (FileUploadException e) {
         e.printStackTrace();
       }
 
-      SimpleDatabase.getActivity(activityName).addRole(roleName, snapFile);
+      if(roleName != null && roleName.length() > 0 &&
+           activityName != null && activityName.length() > 0) {
+        SimpleDatabase.getActivity(activityName).addRole(roleName, snapFile);
+      }
 
       response.sendRedirect("adminactivity.jsp?activityname=" + activityName);
     }
@@ -173,6 +178,10 @@ public class SimpleServlet {
       request.setAttribute("activityName", activityName);
       request.setAttribute("groupName", groupName);
       request.setAttribute("roleName", roleName);
+      
+      if(SimpleDatabase.getActivity(activityName).getRole(roleName).snapFile != null) {
+        request.setAttribute("snapFileExists", true);
+      }
 
       request.getRequestDispatcher("/snap.jsp").forward(request, response);
     }
