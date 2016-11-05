@@ -34,6 +34,9 @@
           return "/snap/" + args.join('/');
         };
 
+        var collabsnap_activity = "<%= request.getAttribute("activityName") %>";
+        var collabsnap_group = "<%= request.getAttribute("groupName") %>";
+
         var ide_morph = new IDE_Morph();
         ide_morph.openIn(world);
         loop();

@@ -10,7 +10,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Ping</servlet-name>
-    <url-pattern>/server/ping</url-pattern>
+    <url-pattern>/server/ping/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -19,7 +19,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>Poll</servlet-name>
-    <url-pattern>/server/poll</url-pattern>
+    <url-pattern>/server/poll/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -28,7 +28,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>PostSprite</servlet-name>
-    <url-pattern>/server/postsprite</url-pattern>
+    <url-pattern>/server/postsprite/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
