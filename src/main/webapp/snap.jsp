@@ -23,6 +23,10 @@
 		<script type="text/javascript" src="/snap/FileSaver.min.js"></script>
 		<script type="text/javascript">
 			var world;
+
+      var collabsnap_activity = "<%= request.getAttribute("activityName") %>";
+      var collabsnap_group = "<%= request.getAttribute("groupName") %>";
+
 			window.onload = function () {
 				world = new WorldMorph(document.getElementById('world'));
                 world.worldCanvas.focus();
@@ -33,9 +37,6 @@
 
           return "/snap/" + args.join('/');
         };
-
-        var collabsnap_activity = "<%= request.getAttribute("activityName") %>";
-        var collabsnap_group = "<%= request.getAttribute("groupName") %>";
 
         var ide_morph = new IDE_Morph();
         ide_morph.openIn(world);
