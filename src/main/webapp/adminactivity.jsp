@@ -5,13 +5,6 @@
   }
 
   edu.vanderbilt.data.Activity activity = edu.vanderbilt.SimpleDatabase.getActivity(name);
-/*  System.out.println(name);
-/
-/
-/  if(request.getParameter("rolename") != null) {
-/    out.println(request.getParameter("rolename"));
-/    out.println(request.getParameter("snapfile"));
-/  }*/
 %>
 
 <html>
@@ -25,6 +18,13 @@
         <li>
         <%=role.name%>
         (<% if(role.snapFile != null) { %><a href="downloadrole/<%=name%>/<%=role.name%>.xml">Download Snap File</a><% } else {%>No File<% } %>):
+        <form action="addrole" method="post" enctype="multipart/form-data" style="display:inline">
+          <input type="hidden" name="activityname" value="<%=name%>">
+          <input type="hidden" name="rolename" value="<%=role.name%>">
+          <input type="file" name="snapfile">
+          <input type="submit" value="Overwrite Snap File">
+        </form>
+        |
         <a href="deleterole?activityname=<%=name%>&rolename=<%=role.name%>">Delete</a>
       <% } %>
     </ul>
