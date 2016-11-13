@@ -4,31 +4,43 @@ import javax.xml.parsers.*;
 import javax.xml.xpath.*;
 import org.w3c.dom.*;
 
-public interface Rule {
-  public void load(Node node);
-  public boolean valid(Document sprite);
+public abstract class Rule {
+  private XPathExpression xpath;
+  public void load(Node node) {
+    Element ele = (Element)node;
+    String name = ele.getAttribute("key");
+    try {
+      this.xpath = XPathFactory.newInstance().newXPath().compile(getXPath(node));
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+  }
 
-  public static class VariableName implements Rule {
-    private XPathExpression xpath;
+  public boolean valid(Document sprite) {
+    try {
+      return this.xpath.evaluate(sprite).equals("true");
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
 
-    public void load(Node node) {
+  protected abstract String getXPath(Node node);
+
+  public static class VariableName extends Rule {
+    protected String getXPath(Node node) {
       Element ele = (Element)node;
       String name = ele.getAttribute("name");
       String val = ele.getAttribute("value");
-      try {
-        this.xpath = XPathFactory.newInstance().newXPath().compile("/sprite/variables/variable[@name='" + name + "']/l/text() = '" + val + "'");
-      } catch(Exception e) {
-        e.printStackTrace();
-      }
+      return "/sprite/variables/variable[@name='" + name + "']/l/text() = '" + val + "'";
     }
+  }
 
-    public boolean valid(Document sprite) {
-      try {
-        return this.xpath.evaluate(sprite).equals("true");
-      } catch(Exception e) {
-        e.printStackTrace();
-      }
-      return false;
+  public static class MessageKey extends Rule {
+    protected String getXPath(Node node) {
+      Element ele = (Element)node;
+      String key = ele.getAttribute("key");
+      return "/message/key/text() = '" + key + "'";
     }
   }
 }
