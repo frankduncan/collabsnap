@@ -36,7 +36,7 @@ public class SimpleDatabase {
 
   public static Group getGroup(String name, Activity activity) {
     for(Group group : getGroups()) {
-      if(group.name.equals(name) && group.activity.name.equals(activity.name)) { return group; }
+      if(group.name.equals(name) && group.activity != null && group.activity.name.equals(activity.name)) { return group; }
     }
     return null;
   }
