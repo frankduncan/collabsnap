@@ -20,13 +20,9 @@ public abstract class Message implements java.io.Serializable {
     String spriteXML;
     Document spriteDocument;
 
-    public SpriteMessage(DocumentBuilder db, String spriteXML) {
+    public SpriteMessage(String spriteXML, Document spriteDocument) {
       this.spriteXML = spriteXML;
-      try {
-        this.spriteDocument = db.parse(new ByteArrayInputStream(spriteXML.getBytes()));
-      } catch(Exception e) {
-        e.printStackTrace();
-      }
+      this.spriteDocument = spriteDocument;
     }
     public String getText() { return spriteXML; }
     public String getContentType() { return "application/xml"; }

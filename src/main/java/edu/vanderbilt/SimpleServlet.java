@@ -78,12 +78,14 @@ public class SimpleServlet {
       }
       Message msg = null;
       try {
-        Document doc = db.parse(new ByteArrayInputStream(str.toString().getBytes()));
-        if(doc.getDocumentElement().getFirstChild() != null) {
-          Rule rule = getRule(doc.getDocumentElement().getFirstChild());
-          msg = group.getMessageFollowingRule(rule);
-        } else {
-          msg = group.poll();
+        synchronized(db) {
+          Document doc = db.parse(new ByteArrayInputStream(str.toString().getBytes()));
+          if(doc.getDocumentElement().getFirstChild() != null) {
+            Rule rule = getRule(doc.getDocumentElement().getFirstChild());
+            msg = group.getMessageFollowingRule(rule);
+          } else {
+            msg = group.poll();
+          }
         }
       } catch(Exception e) {
         e.printStackTrace();
@@ -128,7 +130,14 @@ public class SimpleServlet {
         e.printStackTrace();
       }
       Group group = determineGroup(request);
-      group.offer(new SpriteMessage(db, str.toString()));
+      synchronized(db) {
+        String spriteXML = str.toString();
+        try {
+          group.offer(new SpriteMessage(spriteXML, db.parse(new ByteArrayInputStream(spriteXML.getBytes()))));
+        } catch(Exception e) {
+          e.printStackTrace();
+        }
+      }
       System.out.println(str.toString());
       System.out.println("Sprite Post Successful, size of " + group.name + " / " + group.activity.name + " queue is: " + group.size());
       response.setContentType("text/html");
