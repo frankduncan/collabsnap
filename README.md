@@ -12,7 +12,7 @@ mvn jetty:run
 
 ## Using the released war
 
-You can boot up the [war found on the releases page](https://github.com/frankduncan/collabsnap/releases/download/0.2/collabsnap-server-0.2.war)
+You can boot up the [war found on the releases page](https://github.com/frankduncan/collabsnap/releases/download/0.3/collabsnap-server-0.3.war)
 
 # Loading up collabSNAP from jetty
 
@@ -24,7 +24,7 @@ Then load <projecthome>/src/main/snap/collabsnap.xml from your project
 
 ## Using the release xml
 
-Optionally, load up the [xml from the releases page](https://github.com/frankduncan/collabsnap/releases/download/0.2/collabsnap.xml)
+Optionally, load up the [xml from the releases page](https://github.com/frankduncan/collabsnap/releases/download/0.3/collabsnap.xml)
 
 # Sample projects
 
@@ -38,7 +38,7 @@ Use this block to send a simple ping to the server, which should create some kin
 
 ### collabsnap-poll-server
 
-Use this block to poll server each second for news of a new message.  The first argument should be an unringified method for deserializing sprites, either as clones or sprites.  The second method, which is optional, is for adding filters to the polling for sprites.
+Use this block to poll server each second for news of a new message.  The first argument should be an unringified method for deserializing sprites, either as clones or sprites.  The second method is the set of blocks that get executed if the response from the server is a message.  The third method, which is optional, is for adding filters to the polling for sprites.
 
 ### collabsnap-new-sprite-as-sprite
 
@@ -52,15 +52,34 @@ When used in collaboration with collabsnap-poll-server, new sprites are created 
 
 Filter method which, when used with collabsnap-poll-server, sends a filter to only return sprites with a variables named *name* equal to *value*
 
+### collabsnap-filter-key-equal *key*
+
+Filter method which, when used with collabsnap-poll-server, sends a filter to only return messages with the key *key*
+
 ### collabsnap-serialize-sprite
 
 Use this block to get the xml serialization of the passed in sprite, useful with "my[self]" sense block.
 
-### collabsnap-send-to-server
+### collabsnap-send-to-server *object*
 
-Use this block to send an object to the server.  Most useful with collabsnap-serialize-sprite.
+Use this block to send *object* to the server.  Most useful with collabsnap-serialize-sprite or messages.
 
 ### collabsnap-send-myself-to-server
 
 Use this block to send the current sprite to the server.
 
+### collabsnap-id
+
+Returns a GUID for this running instance of snap.  This will then be retained and returned for every further call while the page is still open.
+
+### collabsnap-message-key *message*
+
+Returns the key portion of *message*
+
+### collabsnap-message-value *message*
+
+Returns the value portion of *message*
+
+### collabsnap-make-message *key* *value*
+
+Returns a message made up of *key* and *value* for message passing.
