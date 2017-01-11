@@ -7,12 +7,10 @@ import java.io.*;
 
 public abstract class Message implements java.io.Serializable {
   public abstract String getText();
-  public abstract String getContentType();
   public abstract boolean ruleApplies(Rule rule);
 
   public static class PingMessage extends Message {
-    public String getText() { return "ping"; }
-    public String getContentType() { return "text/html"; }
+    public String getText() { return "<ping />"; }
     public boolean ruleApplies(Rule rule) { return true; }
   }
 
@@ -25,7 +23,11 @@ public abstract class Message implements java.io.Serializable {
       this.spriteDocument = spriteDocument;
     }
     public String getText() { return spriteXML; }
-    public String getContentType() { return "application/xml"; }
     public boolean ruleApplies(Rule rule) { return rule.valid(spriteDocument); }
   }
+
+  public static Message NULL = new Message() {
+    public String getText() { return "<null />"; }
+    public boolean ruleApplies(Rule rule) { return true; }
+  };
 }

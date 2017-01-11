@@ -50,7 +50,7 @@ public class Group implements java.io.Serializable {
       boolean successfullyRemoved = queue.remove(potential);
       return successfullyRemoved ? potential : getMessageFollowingRule(rule);
     } else {
-      return null;
+      return Message.NULL;
     }
   }
 

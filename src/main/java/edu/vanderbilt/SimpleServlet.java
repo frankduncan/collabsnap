@@ -76,15 +76,14 @@ public class SimpleServlet {
       } catch(Exception e) {
         e.printStackTrace();
       }
-      Message msg = null;
+      List<Message> msgs = new ArrayList<Message>();
       try {
         synchronized(db) {
           Document doc = db.parse(new ByteArrayInputStream(str.toString().getBytes()));
-          if(doc.getDocumentElement().getFirstChild() != null) {
-            Rule rule = getRule(doc.getDocumentElement().getFirstChild());
-            msg = group.getMessageFollowingRule(rule);
-          } else {
-            msg = group.poll();
+          NodeList children = doc.getDocumentElement().getFirstChild().getChildNodes();
+          for(int idx = 0 ; idx < children.getLength() ; idx++) {
+            Rule rule = getRule(children.item(idx));
+            msgs.add(group.getMessageFollowingRule(rule));
           }
         }
       } catch(Exception e) {
@@ -92,18 +91,15 @@ public class SimpleServlet {
         // Prototypes mean no error handling, yay!
       }
 
-      if(msg != null) {
-        response.setContentType(msg.getContentType());
-        response.setStatus(HttpServletResponse.SC_OK);
+      response.setContentType("application/xml");
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.getWriter().print("<responses>");
+      for(Message msg : msgs) {
         response.getWriter().print(msg.getText());
-      } else {
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().print("false");
       }
+      response.getWriter().print("</responses>");
     }
   }
-
 
   private static Rule getRule(Node node) {
     Rule rule = null;
