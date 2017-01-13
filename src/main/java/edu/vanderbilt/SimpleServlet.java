@@ -77,13 +77,18 @@ public class SimpleServlet {
         e.printStackTrace();
       }
       List<Message> msgs = new ArrayList<Message>();
+      boolean allNulls = true;
       try {
         synchronized(db) {
           Document doc = db.parse(new ByteArrayInputStream(str.toString().getBytes()));
           NodeList children = doc.getDocumentElement().getFirstChild().getChildNodes();
           for(int idx = 0 ; idx < children.getLength() ; idx++) {
             Rule rule = getRule(children.item(idx));
-            msgs.add(group.getMessageFollowingRule(rule));
+            Message msg = group.getMessageFollowingRule(rule);
+            if(msg != Message.NULL) {
+              allNulls = false;
+            }
+            msgs.add(msg);
           }
         }
       } catch(Exception e) {
@@ -91,13 +96,19 @@ public class SimpleServlet {
         // Prototypes mean no error handling, yay!
       }
 
-      response.setContentType("application/xml");
-      response.setStatus(HttpServletResponse.SC_OK);
-      response.getWriter().print("<responses>");
-      for(Message msg : msgs) {
-        response.getWriter().print(msg.getText());
+      if(allNulls) {
+        response.setContentType("text/html");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().print("false");
+      } else {
+        response.setContentType("application/xml");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().print("<responses>");
+        for(Message msg : msgs) {
+          response.getWriter().print(msg.getText());
+        }
+        response.getWriter().print("</responses>");
       }
-      response.getWriter().print("</responses>");
     }
   }
 
