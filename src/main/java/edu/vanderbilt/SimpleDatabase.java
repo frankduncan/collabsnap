@@ -85,7 +85,7 @@ public class SimpleDatabase {
   private static class Save implements Runnable {
     public void run() {
       try {
-        Thread.sleep(5 * 60 * 1000);
+        Thread.sleep(60 * 1000);
         java.io.ObjectOutputStream oos = new java.io.ObjectOutputStream(new java.io.FileOutputStream(FILE_NAME));
         instance().state.cullGroups();
         oos.writeObject(instance().state);

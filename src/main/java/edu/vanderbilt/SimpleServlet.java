@@ -76,14 +76,15 @@ public class SimpleServlet {
       } catch(Exception e) {
         e.printStackTrace();
       }
+
       List<Message> msgs = new ArrayList<Message>();
       boolean allNulls = true;
       try {
         synchronized(db) {
           Document doc = db.parse(new ByteArrayInputStream(str.toString().getBytes()));
-          NodeList children = doc.getDocumentElement().getFirstChild().getChildNodes();
+          NodeList children = doc.getDocumentElement().getChildNodes();
           for(int idx = 0 ; idx < children.getLength() ; idx++) {
-            Rule rule = getRule(children.item(idx));
+            Rule rule = getRule(children.item(idx).getFirstChild());
             Message msg = group.getMessageFollowingRule(rule);
             if(msg != Message.NULL) {
               allNulls = false;
