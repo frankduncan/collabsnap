@@ -12,7 +12,7 @@ mvn jetty:run
 
 ## Using the released war
 
-You can boot up the [war found on the releases page](https://github.com/frankduncan/collabsnap/releases/download/0.3/collabsnap-server-0.3.war)
+You can boot up the [war found on the releases page](https://github.com/frankduncan/collabsnap/releases/download/0.3/collabsnap-server-0.6.war)
 
 # Loading up collabSNAP from jetty
 
@@ -20,11 +20,11 @@ In a local webbrowser, load up ```localhost:8080/snap/snap.html```.  Then from i
 
 ## Using the latest commit
 
-Then load <projecthome>/src/main/snap/collabsnap.xml from your project
+Then load <projecthome>/src/main/snap/collabsnap.xml or <projecthome>/src/main/snap/topography.xml from your project
 
 ## Using the release xml
 
-Optionally, load up the [xml from the releases page](https://github.com/frankduncan/collabsnap/releases/download/0.3/collabsnap.xml)
+Optionally, load up the [collabsnap xml](https://github.com/frankduncan/collabsnap/releases/download/0.6/collabsnap.xml) or [topgraphy xml](https://github.com/frankduncan/collabsnap/releases/download/0.6/topography.xml) from the releases page.
 
 # Sample projects
 
@@ -38,15 +38,27 @@ Use this block to send a simple ping to the server, which should create some kin
 
 ### collabsnap-poll-server
 
-Use this block to poll server each second for news of a new message.  The first argument should be an unringified method for deserializing sprites, either as clones or sprites.  The second method is the set of blocks that get executed if the response from the server is a message.  The third method, which is optional, is for adding filters to the polling for sprites.
+Use this block to poll server each second for news of a new message.  This will loop over all registered listeners.  It should only be used once per snap session.
+
+### collabsnap-add-listener
+
+Use to add a listener to the list of polling listeners.  The first argument is a filter as created by collabsnap-filter-\*.  The second is a block to run with the responding message.  Returns an id that can be later used to remove.  Duplicate listeners do not get added.
+
+### collabsnap-remove-listener
+
+Removes a listener with the id passed in (which should have been returned by collabsnap-add-listener)
+
+### collabsnap-reset-listeners
+
+Removes all listeners.
 
 ### collabsnap-new-sprite-as-sprite
 
-When used in collaboration with collabsnap-poll-server, new sprites are created as new sprites.
+When used in collaboration with a listener that has a sprite message, argument is created as a new sprite.
 
 ### collabsnap-new-sprite-as-clone
 
-When used in collaboration with collabsnap-poll-server, new sprites are created as clones.
+When used in collaboration with a listener that has a sprite message, argument is created as a clone.
 
 ### collabsnap-filter-variable-equal *name* *value*
 
@@ -83,3 +95,37 @@ Returns the value portion of *message*
 ### collabsnap-make-message *key* *value*
 
 Returns a message made up of *key* and *value* for message passing.
+
+# Using topography blocks
+
+### topography-stage-width
+
+Returns the stage width in pixels.
+
+### topography-stage-height
+
+Returns the stage height in pixels.
+
+### topography-stage-to-unit-x
+
+Converts a pixel location in x to a unit location.
+
+### topography-unit-to-stage-x
+
+Converts a unit location to a stage location in x.
+
+### topography-stage-to-unit-y
+
+Converts a pixel location in y to a unit location.
+
+### topography-unit-to-stage-y
+
+Converts a unit location to a stage location in y.
+
+### topography-unit-x-position
+
+Gets the current sprites unit x position
+
+### topography-unit-y-position
+
+Gets the current sprites unit y position
