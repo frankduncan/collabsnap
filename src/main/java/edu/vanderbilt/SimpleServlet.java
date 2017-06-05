@@ -241,4 +241,24 @@ public class SimpleServlet {
       response.sendRedirect("/activities/" + activityName + "/" + groupName + "?role=" + roleName);
     }
   }
+
+  public static class Variable extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      Group group = determineGroup(request);
+      String varName = request.getParameter("variable");
+      String varAction = request.getParameter("action");
+      if(varAction.equals("set")) {
+        group.setVariable(varName, Integer.parseInt(request.getParameter("value")));
+      } else if(varAction.equals("increment")) {
+        group.incrementVariable(varName);
+      } else if(varAction.equals("decrement")) {
+        group.decrementVariable(varName);
+      }
+
+      Integer var = group.getVariable(varName);
+      response.setContentType("text/plain");
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.getWriter().print(var == null ? "" : var);
+    }
+  }
 }

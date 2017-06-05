@@ -8,6 +8,7 @@ public class Group implements java.io.Serializable {
   public String name;
   public Activity activity;
   public List<Participant> participants;
+  private Map<String, Integer> variables;
   private Date lastActiveTime;
   private ConcurrentLinkedQueue<Message> queue;
 
@@ -17,6 +18,7 @@ public class Group implements java.io.Serializable {
     lastActiveTime = new Date();
     queue = new ConcurrentLinkedQueue<Message>();
     participants = new ArrayList<Participant>();
+    variables = new HashMap<String, Integer>();
   }
 
   public void offer(Message msg) {
@@ -32,6 +34,36 @@ public class Group implements java.io.Serializable {
   public int size() {
     lastActiveTime = new Date();
     return queue.size();
+  }
+
+  public Integer getVariable(String name) {
+    lastActiveTime = new Date();
+    return variables.get(name);
+  }
+
+  public void setVariable(String name, Integer val) {
+    lastActiveTime = new Date();
+    synchronized(variables) {
+      variables.put(name, val);
+    }
+  }
+
+  public void incrementVariable(String name) {
+    lastActiveTime = new Date();
+    if(variables.containsKey(name)) {
+      synchronized(variables) {
+        variables.put(name, variables.get(name) + 1);
+      }
+    }
+  }
+
+  public void decrementVariable(String name) {
+    lastActiveTime = new Date();
+    if(variables.containsKey(name)) {
+      synchronized(variables) {
+        variables.put(name, variables.get(name) - 1);
+      }
+    }
   }
 
   public boolean stillActive() {
