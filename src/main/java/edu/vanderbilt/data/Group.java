@@ -10,23 +10,23 @@ public class Group implements java.io.Serializable {
   public List<Participant> participants;
   private Map<String, Integer> variables;
   private Date lastActiveTime;
-  private ConcurrentLinkedQueue<Message> queue;
+  private ConcurrentLinkedQueue<Message<Rule.DocumentRule>> queue;
 
   public Group(String name, Activity activity) {
     this.name = name;
     this.activity = activity;
     lastActiveTime = new Date();
-    queue = new ConcurrentLinkedQueue<Message>();
+    queue = new ConcurrentLinkedQueue<Message<Rule.DocumentRule>>();
     participants = new ArrayList<Participant>();
     variables = new HashMap<String, Integer>();
   }
 
-  public void offer(Message msg) {
+  public void offer(Message<Rule.DocumentRule> msg) {
     lastActiveTime = new Date();
     queue.offer(msg);
   }
 
-  public Message poll() {
+  public Message<Rule.DocumentRule> poll() {
     lastActiveTime = new Date();
     return queue.poll();
   }
@@ -50,19 +50,29 @@ public class Group implements java.io.Serializable {
 
   public void incrementVariable(String name) {
     lastActiveTime = new Date();
-    if(variables.containsKey(name)) {
+    if(!variables.containsKey(name)) {
       synchronized(variables) {
-        variables.put(name, variables.get(name) + 1);
+        if(!variables.containsKey(name)) {
+          variables.put(name, 0);
+        }
       }
+    }
+    synchronized(variables) {
+      variables.put(name, variables.get(name) + 1);
     }
   }
 
   public void decrementVariable(String name) {
     lastActiveTime = new Date();
-    if(variables.containsKey(name)) {
+    if(!variables.containsKey(name)) {
       synchronized(variables) {
-        variables.put(name, variables.get(name) - 1);
+        if(!variables.containsKey(name)) {
+          variables.put(name, 0);
+        }
       }
+    }
+    synchronized(variables) {
+      variables.put(name, variables.get(name) - 1);
     }
   }
 
@@ -70,14 +80,28 @@ public class Group implements java.io.Serializable {
     return new Date().getTime() < (lastActiveTime.getTime() + 24L * 60L * 60L * 1000L);
   }
 
-  public Message getMessageFollowingRule(Rule rule) {
+  public Message<?> getMessageFollowingRule(Rule rule) {
     lastActiveTime = new Date();
-    Message potential = null;
-    for(Message msg : queue) {
-      if(msg.ruleApplies(rule)) {
-        potential = msg;
+    Message.VariableMessage variableMessage = new Message.VariableMessage(variables);
+    if(rule instanceof Rule.VariableRule && variableMessage.ruleApplies((Rule.VariableRule)rule)) {
+      return variableMessage;
+    } else if (rule instanceof Rule.DocumentRule) {
+      return getQueueMessageFollowingRule((Rule.DocumentRule)rule);
+    } else {
+      return Message.NULL;
+    }
+  }
+
+  private Message<?> getQueueMessageFollowingRule(Rule.DocumentRule rule) {
+    Message<?> potential = null;
+    if(potential != null) {
+      for(Message<Rule.DocumentRule> msg : queue) {
+        if(msg.ruleApplies(rule)) {
+          potential = msg;
+        }
       }
     }
+
     if(potential != null) {
       boolean successfullyRemoved = queue.remove(potential);
       return successfullyRemoved ? potential : getMessageFollowingRule(rule);

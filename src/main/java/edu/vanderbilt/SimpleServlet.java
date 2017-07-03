@@ -14,8 +14,6 @@ import edu.vanderbilt.data.Message;
 import edu.vanderbilt.data.Message.PingMessage;
 import edu.vanderbilt.data.Message.SpriteMessage;
 import edu.vanderbilt.data.Rule;
-import edu.vanderbilt.data.Rule.VariableName;
-import edu.vanderbilt.data.Rule.MessageKey;
 
 import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.servlet.*;
@@ -116,9 +114,11 @@ public class SimpleServlet {
   private static Rule getRule(Node node) {
     Rule rule = null;
     if(node.getNodeName().equals("variable-equal")) {
-      rule = new VariableName();
+      rule = new Rule.VariableName();
     } else if(node.getNodeName().equals("message-key")) {
-      rule = new MessageKey();
+      rule = new Rule.MessageKey();
+    } else if(node.getNodeName().equals("get-variable")) {
+      rule = new Rule.GetVariable();
     } else {
       throw new RuntimeException("Don't know node type: " + node.getNodeName());
     }
